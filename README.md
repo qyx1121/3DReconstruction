@@ -17,7 +17,7 @@ nii_dir
 然后用如下命令运行重建：
 ```
 python reconstruct.py \
---path_images nii_dir \
+--path_images <path_to_nii_dir> \
 --path_predictions <保存重建后的结果的目录> \
 --gpu # 是否使用GPU进行推理，如果不指定，则默认使用CPU，GPU的对单个MRI的处理速度比CPU快5s左右 \
 ```
@@ -47,7 +47,7 @@ python reconstruct.py \
 如果输入是dicom数据，需要在运行脚本时注明几个参数：
 ```
 python reconstruct.py \
---path_images dicom_dir \
+--path_images <path_to_dicom_dir> \
 --path_predictions <保存重建后的结果的目录> \
 --gpu # 是否使用GPU进行推理，如果不指定，则默认使用CPU，GPU的对单个MRI的处理速度比CPU快5s左右 \
 --dicom # 表明现在输入dicom格式的数据
