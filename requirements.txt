@@ -1,4 +1,4 @@
-onnxruntime
+onnxruntime-gpu
 nibabel
 dicom2nifti
 scipy
