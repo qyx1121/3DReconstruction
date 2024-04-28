@@ -5,20 +5,22 @@ import onnxruntime as ort
 from reconstruction.lab2im import edit_volumes, utils
 from argparse import ArgumentParser
 import dicom2nifti
+import shutil
 
 
 parser = ArgumentParser()
-parser.add_argument("--path_images", type=str, default="example/dicoms",
+parser.add_argument("--path_images", type=str, default="example",
                     help="images to super-resolve / synthesize. Can be the path to a single image or to a folder")
 parser.add_argument("--path_predictions", type=str, default="example",
                     help="path where to save the synthetic 1mm MP-RAGEs. Must be the same type "
                          "as path_images (path to a single image or to a folder)")
 parser.add_argument("--gpu", action="store_true", help="enforce running with CPU rather than GPU.")
 parser.add_argument("--dicom", action="store_true", help="whether the input image is dicom")
-parser.add_argument("--output_folder", default="dcm2nii", help="the output folder for saving the .nii converted from .dicom")
-
+parser.add_argument("--output_folder", help="the output folder for saving the .nii converted from .dicom")
+parser.add_argument("--keep_nii", action="store_true", help="whether to keep intermediate .nii files")
 
 args = vars(parser.parse_args())
+
 path_images = osp.abspath(args['path_images'])
 basename = osp.basename(path_images)
 path_predictions = osp.abspath(args['path_predictions'])
@@ -92,4 +94,6 @@ for idx, (path_image, path_prediction) in enumerate(zip(images_to_segment, path_
         pred = pred[idx[0]:idx[0] + I.shape[1], idx[1]:idx[1] + I.shape[2], idx[2]:idx[2] + I.shape[3]]
 
         utils.save_volume(pred, aff2, None, path_prediction)
-   
+
+if args['dicom'] and not args['keep_nii']:
+    shutil.rmtree(args['output_folder'])
