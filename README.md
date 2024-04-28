@@ -26,6 +26,7 @@ python reconstruct.py \
 --path_images ./nii_dir # 需要重建的nii或nii.gz图像目录 \
 --path_predictions ./results # 保存重建后的结果的目录 \
 --gpu # 是否使用GPU进行推理，如果不指定，则默认使用CPU，GPU的对单个MRI的处理速度比CPU快5s左右 \
+--output_type dicom # 可选择nii或者dicom，默认为nii格式输出
 ```
 
 ### dicom格式
@@ -56,7 +57,8 @@ python reconstruct.py \
 --path_images ./dicom_dir # 需要重建的dicom图像目录 \
 --path_predictions ./results # 重建后的图像的保存目录 \
 --gpu # 是否使用GPU进行推理，如果不指定，则默认使用CPU，GPU的对单个MRI的处理速度比CPU快5s左右 \
---dicom # 表明现在输入dicom格式的数据，仅在转换dicom数据的时候指定
---output_folder ./tmp # 保存中间过程中将dicom转换为nii的暂存目录
---keep_nii # 表明保留生成的中间nii文件，若不指定该参数，则默认不保留
+--output_type dicom # 可选择nii或者dicom，默认为nii格式输出 \
+--dicom # 表明现在输入dicom格式的数据，仅在转换dicom数据的时候指定 \
+--output_folder ./tmp # 保存中间过程中将dicom转换为nii的暂存目录 \
+--keep_nii # 表明保留生成的中间nii文件，若不指定该参数，则默认不保留 \
 ```

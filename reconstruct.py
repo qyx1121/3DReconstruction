@@ -11,16 +11,16 @@ import shutil
 parser = ArgumentParser()
 parser.add_argument("--path_images", type=str, default="example",
                     help="images to super-resolve / synthesize. Can be the path to a single image or to a folder")
-parser.add_argument("--path_predictions", type=str, default="example",
+parser.add_argument("--path_predictions", type=str, default="results",
                     help="path where to save the synthetic 1mm MP-RAGEs. Must be the same type "
                          "as path_images (path to a single image or to a folder)")
 parser.add_argument("--gpu", action="store_true", help="enforce running with CPU rather than GPU.")
 parser.add_argument("--dicom", action="store_true", help="whether the input image is dicom")
-parser.add_argument("--output_folder", help="the output folder for saving the .nii converted from .dicom")
+parser.add_argument("--output_folder", default="tmp", help="the output folder for saving the .nii converted from .dicom")
 parser.add_argument("--keep_nii", action="store_true", help="whether to keep intermediate .nii files")
+parser.add_argument("--output_type", default="nii", choices=["nii", "dicom"], help="the type of the output data, nii or dicom")
 
 args = vars(parser.parse_args())
-
 path_images = osp.abspath(args['path_images'])
 basename = osp.basename(path_images)
 path_predictions = osp.abspath(args['path_predictions'])
@@ -93,7 +93,7 @@ for idx, (path_image, path_prediction) in enumerate(zip(images_to_segment, path_
         pred[pred > 128] = 128
         pred = pred[idx[0]:idx[0] + I.shape[1], idx[1]:idx[1] + I.shape[2], idx[2]:idx[2] + I.shape[3]]
 
-        utils.save_volume(pred, aff2, None, path_prediction)
+        utils.save_volume(pred, aff2, None, path_prediction, args['output_type'])
 
 if args['dicom'] and not args['keep_nii']:
     shutil.rmtree(args['output_folder'])
