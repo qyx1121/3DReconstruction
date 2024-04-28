@@ -1,0 +1,5 @@
+onnxruntime
+nibabel
+dicom2nifti
+scipy
+numpy
