@@ -2,6 +2,12 @@
 
 本仓库主要用于2D-T1图像到3D-T1图像的三维重建
 
+## 环境搭建
+本项目基于Python环境，运行下述命令安装所需python库
+```
+pip install -r requirements.txt
+```
+
 ## 运行
 支持dicom数据格式以及nii数据格式的MRI影像的三维重建
 ### nii格式
