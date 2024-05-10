@@ -105,7 +105,7 @@ def load_volume(path_volume, im_only=True, squeeze=True, dtype=None, aff_ref=Non
         return volume, aff, header
 
 
-def save_volume(volume, aff, header, path, output_type, res=None, dtype=None, n_dims=3):
+def save_volume(volume, aff, header, path, output_type, dcm_hdr = None, res=None, dtype=None, n_dims=3):
     """
     Save a volume.
     :param volume: volume to save
@@ -147,7 +147,7 @@ def save_volume(volume, aff, header, path, output_type, res=None, dtype=None, n_
         else:
             path = path.replace(".nii", "")
             os.makedirs(path, exist_ok=True)
-            run_nii2dcm(nifty, path)
+            run_nii2dcm(nifty, path, header = dcm_hdr)
 
 def get_dims(shape, max_channels=10):
     """Get the number of dimensions and channels from the shape of an array.
@@ -228,7 +228,7 @@ def load_array_if_path(var, load_as_numpy=True):
         var = np.load(var)
     return var
 
-def run_nii2dcm(input_nii_path, output_dcm_path, dicom_type="MR", ref_dicom_file=None):
+def run_nii2dcm(input_nii_path, output_dcm_path, dicom_type="MR", header = None, ref_dicom_file=None):
     """
     Execute NIfTI to DICOM conversion
 
@@ -268,8 +268,11 @@ def run_nii2dcm(input_nii_path, output_dcm_path, dicom_type="MR", ref_dicom_file
 
     # load reference DICOM object
     # --ref_dicom_file specified on command line
+    ref_dicom = None
     if ref_dicom_file is not None:
         ref_dicom = pyd.dcmread(ref_dicom_file)
+    elif header is not None:
+        ref_dicom = header
 
     # transfer Series tags from NIfTI
     transfer_nii_hdr_series_tags(dicom, nii2dcm_parameters)
@@ -277,7 +280,7 @@ def run_nii2dcm(input_nii_path, output_dcm_path, dicom_type="MR", ref_dicom_file
     # transfer tags from reference DICOM
     # IMPORTANT: this deliberately happens last in the DICOM tag manipulation process so that any tag values transferred
     # from the reference DICOM override any values initialised by nii2dcm
-    if ref_dicom_file is not None:
+    if ref_dicom is not None:
         transfer_ref_dicom_series_tags(dicom, ref_dicom)
 
     """
